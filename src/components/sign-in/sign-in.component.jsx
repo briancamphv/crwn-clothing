@@ -2,18 +2,9 @@ import React from 'react';
 import './sign-in.styles.scss';
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
-import {SignInWithGoogle} from '../../firebase/firebase.utils';
+import {auth, SignInWithGoogle} from '../../firebase/firebase.utils';
 
 
-const handleSubmit = event => {
-    event.preventDefault();
-    this.setState({ email: '', password: '' })
-}
-
-const handleChange = event => {
-    const { value, name } = event.target;
-    this.state({ [name]: value })
-}
 
 class SignIn extends React.Component {
     constructor(props) {
@@ -24,6 +15,27 @@ class SignIn extends React.Component {
             password: ''
         }
     }
+
+     handleSubmit = async event => {
+        event.preventDefault();
+    
+        const {email, password} = this.state;
+    
+        try {
+            await auth.signInWithEmailAndPassword(email,password);
+            this.setState({ email: '', password: '' })
+        } catch (error) {
+            console.log(error);
+        }
+    
+        
+    }
+    
+    handleChange = event => {
+        const { value, name } = event.target;
+        this.setState({ [name]: value })
+    }
+    
 
     render() {
         return (
@@ -39,7 +51,7 @@ class SignIn extends React.Component {
                         name="email"
                         type="email"
                         value={this.state.email}
-                        handleChange={this.handleChange}
+                        onChange={this.handleChange}
                         label="Email"
                         required 
                     />
@@ -48,7 +60,7 @@ class SignIn extends React.Component {
                         name="password"
                         type="password"
                         value={this.state.password} 
-                        handleChange={this.handleChange}
+                        onChange={this.handleChange}
                         label="Password"
                         required
                     />
