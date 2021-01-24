@@ -67,7 +67,7 @@ class SignIn extends React.Component {
                
 
                     <CustomButton type="submit" >Sign In</CustomButton>
-                    <CustomButton type="button" yaonClick={SignInWithGoogle} isGoogleSignIn >Sign In With Google</CustomButton>
+                    <CustomButton type="button" onClick={SignInWithGoogle} isGoogleSignIn >Sign In With Google</CustomButton>
                 </form>
             </div>
         )
