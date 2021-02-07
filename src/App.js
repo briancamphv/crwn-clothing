@@ -12,8 +12,7 @@ import { connect } from 'react-redux';
 import {selectCurrentUser} from './redux/user/user.selector';
 import {createStructuredSelector} from 'reselect';
 import { setCurrentUser } from './redux/user/user.actions'
-import { render } from '@testing-library/react';
-import { canConstructResponseFromBodyStream } from 'workbox-core/_private';
+//import {selectCollectionsForPreview} from './redux/shop/shop.selector';
 
 
 class App extends React.Component {
@@ -47,9 +46,11 @@ class App extends React.Component {
       } else {
 
         setCurrentUser(userAuth);
+        
 
       }
 
+      //addCollectionsAndDocuments('collections',collectionsArray.map(({title,items})=>({title,items})));
 
     })
   }
