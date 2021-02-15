@@ -1,12 +1,13 @@
 import { takeLatest, put, all, call } from 'redux-saga/effects';
 import UserActionTypes from './user.types';
 import { auth, googleProvider, createUserProfileDocument, getCurrenUser } from '../../firebase/firebase.utils';
-import { signInSuccess, signInFailure, signOutSuccess, signOutFailure,signUpFailure } from './user.actions';
+import { signInSuccess, signInFailure, signOutSuccess, signOutFailure, signUpFailure } from './user.actions';
 
-export function* getSnapShotFromUserAuth(user,additionalData) {
+export function* getSnapShotFromUserAuth(user, additionalData) {
 
     try {
-        const userRef = yield call(createUserProfileDocument, user,  ...additionalData);
+
+        const userRef = yield call(createUserProfileDocument, user, additionalData);
         const userSnapshot = yield userRef.get();
         yield put(
             signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() })
@@ -19,6 +20,9 @@ export function* getSnapShotFromUserAuth(user,additionalData) {
 
 }
 
+
+
+
 export function* signInWithGoogle() {
     try {
         const { user } = yield auth.signInWithPopup(googleProvider);
@@ -30,6 +34,8 @@ export function* signInWithGoogle() {
     }
 
 }
+
+
 
 export function* signInWithEmail({ payload: { email, password } }) {
     try {
@@ -77,17 +83,18 @@ export function* signOut() {
 
 export function* signUp({ payload: { email, password, displayName } }) {
     try {
-      
-        const {user} = yield auth.createUserWithEmailAndPassword(
+
+        const { user } = yield auth.createUserWithEmailAndPassword(
             email,
             password
         );
-        // const userRef = yield call(createUserProfileDocument, user, {displayName});
-        // const userSnapshot = yield userRef.get();
-        // yield put(
-        //     signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() })
-        // )
-        getSnapShotFromUserAuth(user,{displayName})
+
+        const additionalData = {
+            "displayName": displayName
+        }
+
+        yield getSnapShotFromUserAuth(user, additionalData)
+
     } catch (error) {
         yield put(signUpFailure(error))
     }
